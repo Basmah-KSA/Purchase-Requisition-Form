@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webpage</title>
+        <style>
+            input, select {
+                width: 100%;
+            }
+            h1 {
+                text-align: center;
+                font-weight: bold;
+                font-size: 1.5em;
+            }
+            table {
+                width: 100%;
+            }
+            td {
+                vertical-align: top;
+            }
+        </style>
+        <script>
+            function calculateTotal() {
+                var quantity = document.getElementById('quantity').value;
+                var unit_price = document.getElementById('unit_price').value;
+                var total = quantity * unit_price;
+                document.getElementById('total').innerHTML = total.toFixed(2);
+            }
+            
+            function printPage() {
+                window.print();
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Purchase Requisition Form</h1>
+        <form method="post">
+            <table>
+                <tr>
+                    <td>
+                        <table>
+                            <tr>
+                                <td><label for="date">Date:</label></td>
+                                <td><input type="text" id="date" name="date" value="{{ date }}" readonly></td>
+                            </tr> 
+                            <tr> 
+                                <td><label for="supplier_name">Supplier Name:</label></td> 
+                                <td><input type="text" id="supplier_name" name="supplier_name"></td> 
+                            </tr> 
+                            <tr> 
+                                <td><label for="terms_of_payment">Terms of Payment:</label></td> 
+                                <td> 
+                                    <select id="terms_of_payment" name="terms_of_payment"> 
+                                        {% for option in terms_of_payment_options %} 
+                                            <option value="{{ option }}">{{ option }}</option> 
+                                        {% endfor %} 
+                                    </select> 
+                                </td> 
+                            </tr> 
+                            <tr> 
+                                <td><label for="part_number">Part Number:</label></td> 
+                                <td><input type="text" id="part_number" name="part_number"></td> 
+                            </tr> 
+                            <tr> 
+                                <td><label for="description">Description:</label></td> 
+                                <td></td> 
+                            </tr> 
+                            {% for i in range(5) %} 
+                                <tr> 
+                                    <td></td> 
+                                    <td><input type="text" id="description{{ i }}" name="description"></td> 
+                                </tr> 
+                            {% endfor %} 
+                            <tr> 
+                                <td><label for="unit_type">Unit Type:</label></td> 
+                                <td> 
+                                    <select id="unit_type" name="unit_type"> 
+                                        {% for option in unit_type_options %} 
+                                            <option value="{{ option }}">{{ option }}</option> 
+                                        {% endfor %} 
+                                    </select> 
+                                </td> 
+                            </tr> 
+                            <tr> 
+                                <td><label for="quantity">Quantity:</label></td> 
+                                <td><input type="number" id="quantity" name="quantity" oninput="calculateTotal()"></td> 
+                            </tr> 
+                            <tr> 
+                                <td><label for="unit_price">Unit Price:</label></td> 
+                                <td><input type="number" id="unit_price" name="unit_price" oninput="calculateTotal()"></td> 
+                            </tr> 
+                            <tr> 
+                                <td><label for="total">Total Amount:</label></td> 
+                                <td>SAR<span id="total"></span></td> 
+                            </tr>
+                            <tr>
+                                <td><label for="requested_by">Requested By:</label></td>
+                                <td><input type="text" id="requested_by" name="requested_by"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="reference_number">Reference Number:</label></td>
+                                <td>{{ reference_number }}</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="submit" value="Submit"><button onclick="printPage()">Print</button></td>
+                            </tr>
+                        </table>
+                    </td>
+                    {% if qr_code %}
+                        <td rowspan=2><img src="{{ qr_code }}" alt="QR Code"></td>
+                    {% endif %}
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>
+
